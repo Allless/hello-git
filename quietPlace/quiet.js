@@ -1,1 +1,1 @@
-console.log('quiet place');
+console.log('quietPlace');
