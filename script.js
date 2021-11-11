@@ -1,478 +1,492 @@
-function _chunk(arr, size = 1) {
-    let newArr = [];
-    let subArr = [];
-    for (let i = 0; i < arr.length; i += size) {
-        for (let j = 0; j < size && i + j < arr.length; j++) {
-            subArr.push(arr[i + j]);
-        }
-        newArr.push(subArr);
-        subArr = [];
-    }
-    return newArr;
-}
-
-function _compact(arr) {
-    let newArr = [];
-    for (let i of arr) {
-        if (i) {
-            newArr.push(i);
-        }
-    }
-    return newArr;
-}
-
-function _concat(arr, ...args) {
-    let newArr = [...arr];
-    for (let i of args) {
-        newArr.push(i);
-    }
-    return newArr;
-}
-
-function _differenceWith(arr1, arrs, fun) {
-    let newArr = [];
-    for (let element of arr1) {
-        let break1 = false;
-        let uniq = true;
-        for (let arr of arrs) {
-            if (break1) {
-                break;
-            }
-            for (let element2 of arr) {
-                if (fun(element, element2)) {
-                    uniq = false;
-                }
-            }
-        }
-        if (uniq) {
-            newArr.push(element);
-        }
-    }
-    return newArr;
-}
-
-function _drop(arr, n = 1) {
-    return arr.slice(n);
-}
-
-function _fromPairs(arr) {
-    let newObj = {};
-    for (let subArr of arr) {
-        if (subArr.length == 2) {
-            newObj[subArr[0]] = subArr[1];
-        }
-    }
-    return newObj;
-}
-
-function _intersection(...arrays) {
-    let newArr = [];
-    for (let i of arrays[0]) {
-        let contains = true;
-        for (let arr of arrays) {
-            if (!arr.includes(i)) {
-                contains = false;
-                break;
-            }
-        }
-        if (contains == true) {
-            newArr.push(i);
-        }
-    }
-    return newArr;
-}
-
-function _zip(...arrays) {
-    let newArr = [];
-    for (let i in arrays[0]) {
-        subArr = [];
-        for (let arr of arrays) {
-            subArr.push(arr[i]);
-        }
-        newArr.push(subArr);
-    }
-    return newArr;
-}
-
-function _unzip(array) {
-    let newArr = [];
-    for (let i in array[0]) {
-        subArr = [];
-        for (let arr of array) {
-            subArr.push(arr[i]);
-        }
-        newArr.push(subArr);
-    }
-    return newArr;
-}
-
-function _xor(...arrays) {
-    let newArr = [];
-    for (let arr of arrays) {
-        for (let i of arr) {
-            let count = 0;
-            for (let otherArr of arrays) {
-                if (otherArr.includes(i)) {
-                    count++;
-                    if (count > 1) {
-                        break;
-                    }
-                }
-            }
-            if (count == 1) {
-                newArr.push(i);
-            }
-        }
-    }
-
-    return newArr;
-}
-
-function _groupBy(coll, fun) {
-    let newObj = {};
-    if (fun === 'length') {
-        for (let i of coll) {
-            if (newObj.hasOwnProperty(i.length)) {
-                newObj[i.length] = [...newObj[i.length], i];
-            } else {
-                newObj[i.length] = [i];
-            }
-        }
-        return newObj;
-    }
-    for (let i of coll) {
-        if (newObj.hasOwnProperty(fun(i))) {
-            newObj[fun(i)] = [...newObj[fun(i)], i];
-        } else {
-            newObj[fun(i)] = [i];
-        }
-    }
-    return newObj;
-}
-function a(x) {
-    return x.length;
-}
-
-function _identity(value) {
-    return value;
-}
-function _reject(coll, fun = _identity) {
-    let newArr = [];
-    for (let element in coll) {
-        if (fun(element) == false) {
-            newArr.push(element);
-        }
-    }
-    return newArr;
-}
-
-function _some(coll, fun = _identity) {
-    let result = true;
-    for (let element of coll) {
-        if (fun(element) == false) {
-            result = false;
-            break;
-        }
-    }
-    return result;
-}
-
-function _sortBy(coll, fun = _identity) {
-    let newArr = [...coll];
-    let len = newArr.length;
-    for (let i = 0; i < len - 1; i++) {
-        for (let j = 0; j < len - i; j++) {
-            let el1 = newArr[j];
-            let el2 = newArr[j + 1];
-            if (fun(el1) > fun(el2)) {
-                newArr[j] = el2;
-                newArr[j + 1] = el1;
-            }
-        }
-    }
-    return newArr;
-}
-
-function insertWhitespace(str) {
-    let newStr = '';
-    for (let i = 0; i < str.length; i++) {
-        newStr += str[i];
-        if (i + 1 == str.length) {
-            break;
-        }
-        let lowCase = str[i] === str[i].toLowerCase();
-        if (lowCase && str[i + 1] === str[i + 1].toUpperCase()) {
-            newStr += ' ';
-        }
-    }
-    return newStr;
-}
-function getArgsIndex(str) {
-    let bracketCount = 0;
-    let firstIndex;
-    let lastIndex;
-    for (let i in str) {
-        if (str[i] == '(') {
-            if (bracketCount == 0) {
-                firstIndex = i;
-            }
-            bracketCount++;
-        } else if (str[i] == ')') {
-            bracketCount--;
-            if (bracketCount == 0) {
-                lastIndex = i;
-                return [firstIndex, lastIndex];
-            }
-        }
-    }
-}
-
-function getBodyIndex(str) {
-    let bracketCount = 0;
-    let firstIndex;
-    let lastIndex;
-    for (let i = str.length - 1; i >= 0; i--) {
-        if (str[i] == '}') {
-            if (bracketCount == 0) {
-                lastIndex = i;
-            }
-            bracketCount++;
-        } else if (str[i] == '{') {
-            bracketCount--;
-            if (bracketCount == 0) {
-                firstIndex = i;
-                return [firstIndex, lastIndex];
-            }
-        }
-    }
-}
-
-function getName(str) {
-    let name = '';
-    const array = str.split(' ');
-    if (array[0][0] != '(') {
-        let firstIndex = str.indexOf(' ') + 1;
-        const regexp = /[\(=]/;
-        let lastIndex = str.match(regexp)['index'];
-        name = str.slice(+firstIndex, +lastIndex);
-        name = name.trim();
-    }
-    return name;
-}
-
-function getArgs(str) {
-    let firstIndex;
-    let lastIndex;
-    [firstIndex, lastIndex] = getArgsIndex(str);
-    myArgs = str.slice(+firstIndex, +lastIndex + 1);
-    return myArgs;
-}
-function getBody(str) {
-    let myBody;
-    let firstIndex = 0;
-    let lastIndex = 0;
-    [firstIndex, lastIndex] = getBodyIndex(str);
-    myBody = str.slice(+firstIndex, +lastIndex + 1);
-    return myBody;
-}
-function isRegFunc(str) {
-    arr = str.split(' ');
-    if (arr[0] == 'function') {
+function isAllOdd(n) {
+    if (n % 2 === 0) {
+        return false;
+    } else if (n % 10 === n) {
         return true;
     }
-    return false;
+    return isAllOdd(Math.floor(n / 10));
 }
-function isArrowFunc(str) {
-    const argsEnd = getArgsIndex(str)[1];
-    const bodyStart = getBodyIndex(str)[0];
-    const subStr = str.slice(+argsEnd + 1, +bodyStart);
-    if (subStr.includes('=>')) {
-        return true;
-    }
-    return false;
-}
-function convertFunction(str) {
-    if (isRegFunc(str)) {
-        let myName = getName(str);
-        if (myName) {
-            myName = 'const ' + myName + ' = ';
+
+function findMinPos(arr) {
+    for (let i in arr) {
+        if (arr[i] > 0) {
+            let leftMin = findMinPos(arr.slice(i + 1));
+            if (leftMin != -1 && leftMin < arr[i]) {
+                return leftMin;
+            }
+            return arr[i];
         }
-        const myArgs = getArgs(str);
-        const myBody = getBody(str);
-        const oString = `${myName}${myArgs} => ${myBody}`;
-        return oString;
-    } else if (isArrowFunc(str)) {
-        let myName = 'function ' + getName(str);
-        const myArgs = getArgs(str);
-        const myBody = getBody(str);
-        const oString = `${myName}${myArgs} ${myBody}`;
-        return oString;
+    }
+    return -1;
+}
+
+function findWrongIndex(arr) {
+    if (arr.length === 0) {
+        return -1;
+    }
+    const len = arr.length - 1;
+    if (arr[len] < arr[len - 1]) {
+        return len;
+    }
+    return findWrongIndex(arr.slice(0, len));
+}
+
+function removeFirstElement(arr) {
+    if (arr.length < 2) {
+        if (arr.length) {
+            arr.pop();
+        }
+        return arr;
+    }
+    const lastItem = arr.pop();
+    removeFirstElement(arr);
+    arr.push(lastItem);
+    return arr;
+}
+
+function flatArray(array) {
+    if (array.length === 0) {
+        return [];
+    }
+    if (!Array.isArray(array[0])) {
+        array = [array[0], ...flatArray(array.slice(1))];
     } else {
-        return 'Wrong input';
+        array.splice(0, 1, ...flatArray(array[0]));
+    }
+    return array;
+}
+
+function rotateArray(array, step) {
+    if (step === 0) {
+        return array;
+    }
+    let newArray = rotateArray(array, step - 1);
+    newArray.push(newArray.shift());
+    return newArray;
+}
+
+function findDigitsSum(num) {
+    if (num % 10 === num) {
+        return num;
+    }
+    const sum = (num % 10) + findDigitsSum(Math.floor(num / 10));
+    return findDigitsSum(sum);
+}
+
+function mergeSort(arr) {
+    const middle = Math.ceil(arr.length / 2);
+    if (arr.length === 1) {
+        return arr;
+    }
+    const arr1 = mergeSort(arr.slice(0, middle));
+    const arr2 = mergeSort(arr.slice(middle));
+    let result = [];
+    while (arr1.length || arr2.length) {
+        if (arr1.length === 0) {
+            return [...result, ...arr2];
+        } else if (arr2.length === 0) {
+            return [...result, ...arr1];
+        }
+
+        if (arr1[0] < arr2[0]) {
+            result.push(arr1.shift());
+        } else {
+            result.push(arr2.shift());
+        }
     }
 }
 
-function dayOfYear(str) {
-    const arr = str.split('/');
-    let myDate = new Date(arr[2], arr[0] - 1, arr[1]);
-    let calcPoint = new Date(arr[2], 0, 1);
-    const msInDay = 86400000;
-    const ms = myDate.getTime() - calcPoint.getTime();
-    console.log(myDate.value, calcPoint.value);
-    const days = Math.floor(ms / msInDay) + 1;
-    return days;
+class Node {
+    constructor(value, next = this, prev = this) {
+        this.value = value;
+        this.next = next;
+        this.prev = prev;
+    }
+}
+class LinkedList {
+    constructor() {
+        this.size = 0;
+        this.head = null;
+    }
+    size() {
+        return this.size;
+    }
+    clear() {
+        this.head = null;
+        this.size = 0;
+    }
+    getLast() {
+        return this.head.prev;
+    }
+    getFirst() {
+        return this.head;
+    }
+    push(value) {
+        let node;
+        if (this.size) {
+            node = new Node(value, this.getFirst(), this.getLast());
+            this.getLast().next = node;
+            this.getFirst().prev = node;
+        } else {
+            node = new Node(value);
+            this.head = node;
+        }
+        this.size++;
+    }
 }
 
-function getDay(str) {
-    const arr = str.split('/');
-    const myDate = new Date(arr[2], arr[0] - 1, arr[1]);
-    const day = myDate.getDay();
-    const dayOfWeek = [
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-    ];
-    return dayOfWeek[day];
+class Stack {
+    constructor() {
+        this._data = [];
+    }
+    length() {
+        return this._data.length;
+    }
+    push(value) {
+        this._data.push(value);
+    }
+    pop() {
+        return this._data.pop();
+    }
+    peek() {
+        return this._data[this._data.length - 1];
+    }
+    search(value) {
+        return this._data.indexOf(value);
+    }
+    isEmpty() {
+        return !Boolean(this._data.length);
+    }
+    print() {
+        console.log(this._data);
+    }
 }
 
-function sum(x) {
-    return (y) => x + y;
+function abacabaPattern(number) {
+    if (number <= 0) {
+        return '';
+    }
+    return (
+        abacabaPattern(number - 1) +
+        String.fromCharCode(64 + number) +
+        abacabaPattern(number - 1)
+    );
 }
 
-function redundant(x) {
-    return () => x;
+function getValues(tree) {
+    return Object.values(tree).reduce((array, element) => {
+        if (typeof element === 'object') {
+            if (element !== null) {
+                array.push(...getValues(element));
+            }
+        } else {
+            array.push(element);
+        }
+        return array;
+    }, []);
 }
 
-function add_suffix(x) {
-    return (y) => y + x;
+function selectionSort(arr) {
+    const array = [...arr];
+    for (let i = 0; i < array.length / 2; i++) {
+        let minIndex = i;
+        let maxIndex = i;
+        for (let j = i; j < array.length - i; j++) {
+            if (array[j] > array[maxIndex]) {
+                maxIndex = j;
+            }
+            if (array[j] < array[minIndex]) {
+                minIndex = j;
+            }
+        }
+        const last = array.length - i - 1;
+        [array[minIndex], array[i]] = [array[i], array[minIndex]];
+        if (maxIndex === i) {
+            maxIndex = minIndex;
+        }
+        [array[maxIndex], array[last]] = [array[last], array[maxIndex]];
+    }
+    return array;
 }
 
-function printAfter(func) {
-    console.log('Hello, World');
-    func();
+class Dictionary {
+    constructor(object) {
+        this._data = {};
+        for (let key in object) {
+            this._data[key] = [object[key]];
+        }
+    }
+
+    set(key, value) {
+        if (key in this._data) {
+            if (!this._data[key].includes(value)) {
+                this._data[key].push(value);
+            }
+        } else {
+            this._data[key] = [value];
+        }
+    }
+
+    get(key) {
+        if (key in this._data) {
+            return this._data[key];
+        }
+    }
+
+    getCountByKey(key) {
+        if (key in this._data) {
+            return this._data[key].length;
+        }
+        return 0;
+    }
+
+    remove(key) {
+        delete this._data[key];
+    }
+
+    keys() {
+        return Object.keys(this._data);
+    }
+
+    values() {
+        return Object.values(this._data);
+    }
+
+    entries() {
+        return Object.keys(this._data).map((key) => [key, this._data[key]]);
+    }
 }
 
-function makeCircle(radius) {
-    return {
-        getArea() {
-            return Math.PI * radius * radius;
+function quickSort(array) {
+    if (array.length < 2) {
+        return array;
+    }
+    const lastIndex = array.length - 1;
+    const lowerArray = [];
+    const higherArray = [];
+    const pivot = (array[0] + array[lastIndex]) / 2;
+    for (let value of array) {
+        if (value <= pivot) {
+            lowerArray.push(value);
+        } else {
+            higherArray.push(value);
+        }
+    }
+    return [...quickSort(lowerArray), ...quickSort(higherArray)];
+}
+
+function numToGoogle(array) {
+    const obj = {
+        0: (str, count) => {
+            const lastValue = str;
+            while (--count) {
+                str += lastValue;
+            }
+            return str;
         },
-        getPerimetr() {
-            return Math.PI * radius * 2;
+        1: (str) => str + 'g',
+        2: (str) => str + 'o',
+        3: (str) => str + 'l',
+        4: (str) => str + 'e',
+        5: (str) => {
+            const lastIndex = str.length - 1;
+            return str.slice(0, lastIndex) + str[lastIndex].toUpperCase();
         },
+        6: (str) => str + '.',
+        7: (str) => str[0].toUpperCase() + str.slice(1),
+        8: (str) => str.split('').reverse().join(''),
+        9: (str) => '',
     };
-}
-
-function mapping(arr) {
-    let obj = {};
-    for (let i of arr) {
-        obj[i] = i.toUpperCase();
-    }
-    return obj;
-}
-
-function getFrequencies(arr) {
-    let obj = {};
-    for (let i of arr) {
-        if (obj.hasOwnProperty(i)) {
-            obj[i] += 1;
-        } else {
-            obj[i] = 1;
-        }
-    }
-    return obj;
-}
-
-function findAndRemove(obj) {
-    let finObj = {};
-    for (key in obj) {
-        let newObj = {};
-        for (let sKey in obj[key]) {
-            let value = +obj[key][sKey];
-            if (!Number.isNaN(value)) {
-                newObj[sKey] = value;
+    let res = '';
+    for (let str of array) {
+        str = str.toString();
+        let iterRes = '';
+        for (let i in str) {
+            if (str[i] === '0') {
+                iterRes = obj[0](iterRes, +str.slice(+i + 1));
+                break;
             }
-        }
-        finObj[key] = newObj;
-    }
-    return finObj;
-}
 
-function prefix(str) {
-    const arr = str.split(' ');
-    let stack = [];
-    let res = null;
-    for (let i of arr) {
-        if ('+*/-%'.includes(i)) {
-            stack.push(i);
-        } else {
-            if (res != null) {
-                console.log(res, i);
-                switch (stack[stack.length - 1]) {
-                    case '+':
-                        res += +i;
-                        break;
-                    case '*':
-                        res *= +i;
-                        break;
-                    case '/':
-                        res /= +i;
-                        break;
-                    case '-':
-                        res -= +i;
-                        break;
-                    case '%':
-                        res %= +i;
-                        break;
-                }
-            } else {
-                res = +i;
-            }
+            iterRes = obj[str[i]](iterRes);
         }
+        res += iterRes;
     }
     return res;
 }
 
-const products = [
-    { number: 1, price: 100, name: 'Orange juice' },
-    { number: 2, price: 200, name: 'Soda' },
-    { number: 3, price: 150, name: 'Chocolate snack' },
-    { number: 4, price: 250, name: 'Cookies' },
-    { number: 5, price: 180, name: 'Gummy bears' },
-    { number: 6, price: 500, name: 'Condoms' },
-    { number: 7, price: 120, name: 'Crackers' },
-    { number: 8, price: 220, name: 'Potato chips' },
-    { number: 9, price: 80, name: 'Small snack' },
-];
-
-function vendingMachine(products, money, number) {
-    number--;
-    const coins = [500, 200, 100, 50, 20, 10];
-    let newObj = {};
-    let price;
-    if (products[number]) {
-        newObj.product = products[number].name;
-        price = products[number].price;
-    } else {
-        return 'Enter a valid product number';
+function histogram(array, char) {
+    let res = [];
+    for (let num of array) {
+        let iterRes = '';
+        while (num--) {
+            iterRes += char;
+        }
+        res.push(iterRes);
     }
-    if (money >= price) {
-        newObj.change = [];
-        while (money - price >= 10) {
-            for (let i of coins) {
-                if (money - i >= price) {
-                    newObj.change.push(i);
-                    money -= i;
-                    break;
+    return res.join('\n');
+}
+
+function binarySearch(array, value) {
+    let first = 0;
+    let last = array.length - 1;
+    while (last - first > 0) {
+        console.log(first, last);
+        const middle = Math.floor((first + last) / 2);
+        if (array[middle] < value) {
+            first = middle + 1;
+        } else {
+            last = middle;
+        }
+    }
+    if (array[first] === value) {
+        return first;
+    }
+    return -1;
+}
+
+function insertionSort(array) {
+    for (let i = 0; i < array.length; i++) {
+        for (let j = i; j > 0, array[j] < array[j - 1]; j--) {
+            [array[j], array[j - 1]] = [array[j - 1], array[j]];
+        }
+    }
+    return array;
+}
+
+function getPair(nums, sum) {
+    nums.sort();
+    for (let i = 0, j = nums.length - 1; i < j; ) {
+        if (nums[i] + nums[j] > sum) {
+            j--;
+        } else if (nums[i] + nums[j] < sum) {
+            i++;
+        } else {
+            return [nums[i], nums[j]];
+        }
+    }
+    return -1;
+}
+
+function getKnightMinSteps(n, s, d) {
+    if (s[0] === d[0] && s[1] === d[1]) {
+        return 0;
+    }
+
+    const matrix = Array(n)
+        .fill(0)
+        .map(() => Array(n).fill(0));
+    matrix[s[0]][s[1]] = 1;
+
+    function isLastIter(currentPositions) {
+        const newPositions = [];
+        for (let pos of currentPositions) {
+            for (let i of [-1, 1, -2, 2]) {
+                for (let j of [3 - Math.abs(i), Math.abs(i) - 3]) {
+                    const newX = pos[0] + i;
+                    const newY = pos[1] + j;
+                    if (
+                        newX < 0 ||
+                        newX >= n ||
+                        newY < 0 ||
+                        newY >= n ||
+                        matrix[newX][newY]
+                    ) {
+                        continue;
+                    }
+                    if (newX === d[0] && newY === d[1]) {
+                        return true;
+                    }
+                    newPositions.push([newX, newY]);
+                    matrix[newX][newY] = 1;
                 }
             }
         }
-    } else {
-        return 'Not enougth money for this product';
+        currentPositions.splice(0, currentPositions.length, ...newPositions);
+        return false;
     }
-    return newObj;
+
+    const currentPositions = [s];
+    for (let i = 1; currentPositions.length > 0; i++) {
+        if (isLastIter(currentPositions)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+function findTreeHeigth(array) {
+    if (array.length === 0) {
+        return 0;
+    }
+    const childs = [0];
+    let i;
+    let j = 1;
+    for (i = 0; childs.length; i++) {
+        const newChilds = [];
+        for (let child of childs) {
+            for (; array[j] === child; j++) {
+                newChilds.push(j);
+            }
+        }
+        childs.splice(0, childs.length, ...newChilds);
+    }
+    return i;
+}
+
+function getRoot(n) {
+    let start = 0;
+    let end = n;
+    let sqrt;
+    do {
+        sqrt = (start + end) / 2;
+        if (sqrt * sqrt > n) {
+            end = sqrt;
+        } else if (sqrt * sqrt < n) {
+            start = sqrt;
+        }
+    } while (Math.abs(n - sqrt * sqrt) >= 1);
+    return Math.floor(sqrt);
+}
+
+function getSquare(n) {
+    n = Math.abs(n);
+    let res = 0;
+    let count = n;
+    let counter = 0;
+    while (count > 0) {
+        let toAdd = n;
+        let i;
+        for (i = 1; i + i < count; i += i) {
+            toAdd += toAdd;
+            console.log(res + toAdd, counter);
+            counter++;
+        }
+        res += toAdd;
+        count -= i;
+    }
+    return res;
+}
+
+function signSort(array) {
+    if (array.length == 1) {
+        return array;
+    }
+    const negArray = [];
+    const mid = Math.floor(array.length / 2);
+    const first = signSort(array.slice(0, mid));
+    const second = signSort(array.slice(mid));
+    while (first.length >= 0 && first[0] < 0) {
+        negArray.push(first.shift());
+    }
+    while (second.length >= 0 && second[0] < 0) {
+        negArray.push(second.shift());
+    }
+    return [...negArray, ...first, ...second];
+}
+
+function getEffMoves(x, y) {
+    if (x == 1 || y == 1) {
+        return 1;
+    }
+    return getEffMoves(x - 1, y) + getEffMoves(x, y - 1);
 }
