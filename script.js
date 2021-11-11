@@ -490,3 +490,4 @@ function getEffMoves(x, y) {
     }
     return getEffMoves(x - 1, y) + getEffMoves(x, y - 1);
 }
+//
