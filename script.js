@@ -414,21 +414,21 @@ function getKnightMinSteps(n, s, d) {
     return -1;
 }
 
-function findTreeHeigth(array) {
+function findTreeHeight(array) {
     if (array.length === 0) {
         return 0;
     }
-    const childs = [0];
+    const child = [0];
     let i;
     let j = 1;
-    for (i = 0; childs.length; i++) {
-        const newChilds = [];
-        for (let child of childs) {
-            for (; array[j] === child; j++) {
-                newChilds.push(j);
+    for (i = 0; child.length; i++) {
+        const newChild = [];
+        for (let c of child) {
+            for (; array[j] === c; j++) {
+                newChild.push(j);
             }
         }
-        childs.splice(0, childs.length, ...newChilds);
+        child.splice(0, child.length, ...newChild);
     }
     return i;
 }
@@ -490,4 +490,3 @@ function getEffMoves(x, y) {
     }
     return getEffMoves(x - 1, y) + getEffMoves(x, y - 1);
 }
-//
