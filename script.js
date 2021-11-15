@@ -418,19 +418,44 @@ function findTreeHeight(array) {
     if (array.length === 0) {
         return 0;
     }
-    const child = [0];
+    let child = [0];
     let i;
     let j = 1;
     for (i = 0; child.length; i++) {
-        const newChild = [];
+        let newChild = [];
         for (let c of child) {
-            for (; array[j] === c; j++) {
+            for (; array[j] === c && j < array.length; j++) {
                 newChild.push(j);
             }
         }
-        child.splice(0, child.length, ...newChild);
+        child = newChild;
+        newChild = [];
     }
     return i;
+}
+function findTreeHeight2(array) {
+    if (array.length === 0) {
+        return 0;
+    }
+    let child = [0];
+    let newChild = [];
+    let i = 0;
+    let height = 0;
+    for (let j = 1; j < array.length; j++) {
+        if (array[j] === child[i]) {
+            newChild.push(j);
+        } else {
+            if (i < child.length - 1) {
+                i++;
+            } else {
+                child = newChild;
+                newChild = [];
+                i = 0;
+                height++;
+            }
+        }
+    }
+    return height;
 }
 
 function getRoot(n) {
@@ -475,10 +500,10 @@ function signSort(array) {
     const mid = Math.floor(array.length / 2);
     const first = signSort(array.slice(0, mid));
     const second = signSort(array.slice(mid));
-    while (first.length >= 0 && first[0] < 0) {
+    while (first.length > 0 && first[0] < 0) {
         negArray.push(first.shift());
     }
-    while (second.length >= 0 && second[0] < 0) {
+    while (second.length > 0 && second[0] < 0) {
         negArray.push(second.shift());
     }
     return [...negArray, ...first, ...second];
